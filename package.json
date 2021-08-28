@@ -1,0 +1,29 @@
+{
+  "name": "doorway-v2",
+  "version": "0.1.0",
+  "description": "Open my garage door with a phone call ",
+  "main": "doorway.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon",
+    "start": "node ."
+  },
+  "repository": "github:tycrek/Doorway-v2",
+  "keywords": [
+    "garage",
+    "door"
+  ],
+  "author": "tycrek <t@tycrek.com> (https://tycrek.com/)",
+  "license": "ISC",
+  "bugs": "https://github.com/tycrek/Doorway-v2/issues",
+  "homepage": "https://github.com/tycrek/Doorway-v2#readme",
+  "dependencies": {
+    "@tycrek/isprod": "^2.0.2",
+    "@tycrek/log": "^0.5.6",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-xml-bodyparser": "^0.3.0",
+    "rpi-gpio": "^2.1.7",
+    "twilio": "^3.67.1"
+  }
+}
