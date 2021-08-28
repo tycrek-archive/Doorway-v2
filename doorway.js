@@ -61,7 +61,7 @@ app.get('/gather', (req, res) => {
 	log[success ? 'success' : 'warn']('Entry', message);
 
 	// If working in production, send a GPIO signal to the door
-	if (isProd) gpio.setup(GPIO_PIN, gpio.DIR_OUT)
+	if (isProd && success) gpio.setup(GPIO_PIN, gpio.DIR_OUT)
 		.then(() => gpio.write(GPIO_PIN, true))
 		.then(() => log.debug('GPIO sent', `Pin ${GPIO_PIN}`))
 		.catch((err) => log.error('Error', err.toString()))
