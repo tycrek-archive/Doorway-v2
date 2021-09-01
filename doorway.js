@@ -9,6 +9,9 @@ const xmlparser = require('express-xml-bodyparser');
 const gpio = require('rpi-gpio').promise;
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 
+// Contacts
+const CONTACTS = require('./contacts.json');
+
 // Get app name and version
 const { name: APP_NAME, version: APP_VERSION } = require('./package.json');
 
@@ -55,9 +58,12 @@ app.get('/gather', (req, res) => {
 	const { Digits, From, FromCity, FromState, FromCountry } = req.query;
 	const success = Digits === process.env.DOOR_CODE;
 	const message = success ? 'Correct code' : 'Incorrect code';
+	const location = `${FromCity}, ${FromState}, ${FromCountry}`;
+	const caller = CONTACTS.find(({ numbers }) => numbers.includes(From))
+	const contact = caller ? caller.name : From;
 
 	// Log call & if entry was successful
-	log.info('Call handled', From, `${FromCity}, ${FromState}, ${FromCountry}`);
+	log.info('Call handled', contact, location);
 	log[success ? 'success' : 'warn']('Entry', message);
 
 	// If working in production, send a GPIO signal to the door
