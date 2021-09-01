@@ -12,6 +12,9 @@ const VoiceResponse = require('twilio').twiml.VoiceResponse;
 // Contacts
 const CONTACTS = require('./contacts.json');
 
+// Twilio client
+const client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+
 // Get app name and version
 const { name: APP_NAME, version: APP_VERSION } = require('./package.json');
 
@@ -72,7 +75,12 @@ app.get('/gather', (req, res) => {
 		.then(() => new Promise((resolve) => setTimeout(resolve, 1000)))
 		.then(() => gpio.write(GPIO_PIN, true))
 		.then(() => log.debug('GPIO sent', `Pin ${GPIO_PIN}`))
-		.catch((err) => log.error('Error', err.toString()))
+		.catch((err) => log.error('GPIO Error', err.toString()));
+
+	// Send SMS notice to admin
+	client.messages.create({ body: `${contact}: ${message}`, messagingServiceSid: process.env.TWILIO_SMS_SERVICE, to: CONTACTS[0].numbers[0] })
+		.then(({ sid }) => log.debug('SMS SID', sid))
+		.catch((err) => log.error('SMS Error', err.toString()));
 
 	// Send TwiML response
 	res.type('xml').send(new VoiceResponse().toString());
